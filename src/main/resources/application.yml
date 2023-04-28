@@ -1,0 +1,39 @@
+# port config
+server:
+  port: 8001
+
+# datasource config
+spring:
+  datasource:
+    driver-class-name: oracle.jdbc.OracleDriver
+    url: jdbc:oracle:thin:@localhost:1521:xe
+    username: C##RESTAPI
+    password: RESTAPI
+
+  # jpa config
+  jpa:
+    generate-ddl: false
+    show-sql: true
+    database: oracle
+    properties:
+      hibernate:
+        '[format_sql]': true
+
+
+# image 관련 값 설정
+image: 
+  image-url: http://localhost:8001/productimgs/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
