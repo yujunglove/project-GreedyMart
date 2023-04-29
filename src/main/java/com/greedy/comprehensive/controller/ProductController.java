@@ -40,7 +40,7 @@ public class ProductController {
 
         ResponseDtoWithPaging responseDtoWithPaging = new ResponseDtoWithPaging();
         responseDtoWithPaging.setPageInfo(pageInfo);
-        responseDtoWithPaging.setData(productDtoList);
+        responseDtoWithPaging.setData(productDtoList.getContent());
         return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "조회성공",responseDtoWithPaging));
     }
 
@@ -57,7 +57,7 @@ public class ProductController {
 
         ResponseDtoWithPaging responseDtoWithPaging = new ResponseDtoWithPaging();
         responseDtoWithPaging.setPageInfo(pageInfo);
-        responseDtoWithPaging.setData(productDtoList);
+        responseDtoWithPaging.setData(productDtoList.getContent());
         return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "조회성공",responseDtoWithPaging));
     }
 

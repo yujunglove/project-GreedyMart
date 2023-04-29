@@ -58,7 +58,7 @@ public class ProductService {
 
 
         /* 클라이언트 측에서 서버에 저장 된 이미지 요청 시 필요한 주소로 가공 */
-//		productDtoList.forEach(product -> product.setProductImgUrl(IMAGE_URL + product.getProductImgUrl()));
+		productDtoList.forEach(product -> product.setProductImgUrl(IMAGE_URL + product.getProductImgUrl()));
 
 
         // log.info("[ProductService] productDtoList.getContent() : {}",productDtoList.getContent());
