@@ -1,12 +1,14 @@
 package com.greedy.comprehensive.product.entity;
 
 import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
 
 //기본 생성자는 생성이 되니까 getter만 추가 한다.
 @Getter
 @Entity
+@Setter
 @Table(name = "TBL_PRODUCT")
 @SequenceGenerator(name = "PRODUCT_SEQ_GENERATOR",
         sequenceName = "SEQ_PRODUCT_CODE",
@@ -40,6 +42,7 @@ public class Product {
     @Column(name = "PRODUCT_ORDERABLE")
     private String productOrderable;
 
+    //(cascade = CascadeType.PERSIST) : 영속성 전이 설정을 넣으면 Category에 새로운값이 있을 경우 insert 될 수 있음.
     @ManyToOne
     @JoinColumn(name = "CATEGORY_CODE")
     private Category category;
@@ -49,6 +52,17 @@ public class Product {
 
     @Column(name = "PRODUCT_STOCK")
     private Long productStock;
+
+    public void update(String productName, String productPrice, String productDescription, String productOrderable, Category category,
+    Long productStock) {
+        this.productName = productName;
+        this.productPrice = productPrice;
+        this.productDescription =productDescription;
+        this.productOrderable =productOrderable;
+        this.category =category;
+        this.productStock =productStock;
+    }
+
 
 
 

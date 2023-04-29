@@ -113,6 +113,50 @@ public class ProductController {
         return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "조회 성공", responseDtoWithPaging));
     }
 
+    //5. 상품 상세 조회 - productCode로 상품1개조회, 주문 불가 상품제외(고객)
+    //조회이니까 getMapping
+    @GetMapping("products/{productCode}")
+    public ResponseEntity<ResponseDto> selectProductDetail(@PathVariable Long productCode) {
+
+
+        return ResponseEntity.ok()
+        		.body(new ResponseDto(HttpStatus.OK,"조회성공",productService.selectProduct(productCode)));
+    }
+
+    //6. 상품 상세 조회 - productCode로 상품 1개 조회, 주문 불가 상품 포함(관리자) -
+    @GetMapping("products-management/{productCode}")
+    public ResponseEntity<ResponseDto> selectProductDetailForAdmin(@PathVariable Long productCode) {
+
+
+        return ResponseEntity.ok()
+                .body(new ResponseDto(HttpStatus.OK,"조회성공",productService.selectProductForAdmin(productCode)));
+    }
+
+    /* 7. 상품 등록 */
+    @PostMapping("/products")
+    public ResponseEntity<ResponseDto> insertProduct(@ModelAttribute ProductDto productDto) {
+
+        productService.insertProduct(productDto);
+
+        return ResponseEntity
+                .ok()
+                .body(new ResponseDto(HttpStatus.OK,"상품 등록 성공"));
+
+
+    }
+
+    /* 8. 상품 수정 */
+    @PutMapping("/products")
+    public ResponseEntity<ResponseDto> updateProduct(@ModelAttribute ProductDto productDto) {
+
+        productService.updateProduct(productDto);
+        return ResponseEntity
+                .ok()
+                .body(new ResponseDto(HttpStatus.OK,"상품 수정 성공"));
+
+    }
+
+
 
 
 }

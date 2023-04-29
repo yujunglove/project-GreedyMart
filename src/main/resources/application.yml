@@ -23,7 +23,7 @@ spring:
 # image 관련 값 설정
 image: 
   image-url: http://localhost:8001/productimgs/
-
+  image-dir: src/main/resources/static/productimgs
 
 
 

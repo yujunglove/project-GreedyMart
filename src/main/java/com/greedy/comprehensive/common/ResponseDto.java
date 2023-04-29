@@ -10,6 +10,11 @@ public class ResponseDto {
     private String message;
     private Object data;
 
+    public ResponseDto(HttpStatus status, String message) {
+        this.status = status.value();
+        this.message = message;
+    }
+
     public ResponseDto(HttpStatus status, String message, Object data) {
         this.status = status.value();
         this.message = message;
