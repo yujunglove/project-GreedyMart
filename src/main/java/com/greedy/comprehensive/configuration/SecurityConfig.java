@@ -8,6 +8,8 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
@@ -23,6 +25,11 @@ public class SecurityConfig {
         return (web) -> web.ignoring().antMatchers("/productimgs/**");
     }
 
+    // 비밀번호 암호화를 위한 빈 등록
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return  new BCryptPasswordEncoder();
+    }
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
