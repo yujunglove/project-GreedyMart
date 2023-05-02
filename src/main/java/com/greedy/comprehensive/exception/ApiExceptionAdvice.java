@@ -10,6 +10,15 @@ import com.greedy.comprehensive.exception.dto.ApiExceptionDto;
 @RestControllerAdvice
 public class ApiExceptionAdvice {
 
+	@ExceptionHandler(UserNotFoundException.class)
+	public ResponseEntity<ApiExceptionDto> exceptionHandler(UserNotFoundException e){
+
+		return ResponseEntity
+				.status(HttpStatus.BAD_REQUEST)
+				.body(new ApiExceptionDto(HttpStatus.BAD_REQUEST, e.getMessage()));
+
+	}
+
 	@ExceptionHandler(DuplicatedUserEmailException.class)
 	public ResponseEntity<ApiExceptionDto> exceptionHandler(DuplicatedUserEmailException e){
 

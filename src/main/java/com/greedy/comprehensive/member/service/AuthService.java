@@ -7,7 +7,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.greedy.comprehensive.exception.DuplicatedUserEmailException;
 import com.greedy.comprehensive.exception.LoginFailedException;
+import com.greedy.comprehensive.jwt.TokenProvider;
 import com.greedy.comprehensive.member.dto.MemberDto;
+import com.greedy.comprehensive.member.dto.TokenDto;
 import com.greedy.comprehensive.member.entity.Member;
 import com.greedy.comprehensive.member.repository.MemberRepository;
 
@@ -20,11 +22,13 @@ public class AuthService {
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
     private final ModelMapper modelMapper;
+    private final TokenProvider tokenProvider;
 
-    public AuthService(MemberRepository memberRepository, PasswordEncoder passwordEncoder, ModelMapper modelMapper) {
+    public AuthService(MemberRepository memberRepository, PasswordEncoder passwordEncoder, ModelMapper modelMapper, TokenProvider tokenProvider) {
         this.memberRepository = memberRepository;
         this.passwordEncoder = passwordEncoder;
         this.modelMapper = modelMapper;
+        this.tokenProvider = tokenProvider;
     }
 
     /* 1. 회원 가입 */
@@ -49,7 +53,7 @@ public class AuthService {
     }
 
     /* 2. 로그인 */
-    public Object login(MemberDto memberDto) {
+    public TokenDto login(MemberDto memberDto) {
 
         log.info("[AuthService] login start ======================================");
         log.info("[AuthService] memberDto : {}", memberDto);
@@ -59,14 +63,16 @@ public class AuthService {
                 .orElseThrow(() -> new LoginFailedException("잘못 된 아이디 또는 비밀번호입니다."));
 
         // 2. 비밀번호 매칭 확인
-        if(passwordEncoder.matches(memberDto.getMemberPassword(),member.getMemberPassword())) {
-            throw  new LoginFailedException("잘못 된 아이디 또는 비밀번호입니다.");
+        if(!passwordEncoder.matches(memberDto.getMemberPassword(), member.getMemberPassword())) {
+            throw new LoginFailedException("잘못 된 아이디 또는 비밀번호입니다.");
         }
 
         // 3. 토큰 발급
+        TokenDto tokenDto = tokenProvider.generateTokenDto(modelMapper.map(member, MemberDto.class));
+        log.info("[AuthService] tokenDto : {}", tokenDto);
 
         log.info("[AuthService] login end ======================================");
-        return null;
+        return tokenDto;
     }
 
 

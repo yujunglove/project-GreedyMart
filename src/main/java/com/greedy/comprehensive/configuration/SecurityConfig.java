@@ -11,13 +11,32 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import com.greedy.comprehensive.jwt.JwtAccessDeniedHandler;
+import com.greedy.comprehensive.jwt.JwtAuthenticationEntryPoint;
+import com.greedy.comprehensive.jwt.JwtFilter;
+import com.greedy.comprehensive.jwt.TokenProvider;
+
 @EnableWebSecurity
 public class SecurityConfig {
 
+    // 인증 실패 핸들러
+    private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+    // 인가 실패 핸들러
+    private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
+    // 커스텀 인증 필터
+    private final JwtFilter jwtFilter;
+
+    public SecurityConfig(JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint,
+                          JwtAccessDeniedHandler jwtAccessDeniedHandler, JwtFilter jwtFilter) {
+        this.jwtAuthenticationEntryPoint = jwtAuthenticationEntryPoint;
+        this.jwtAccessDeniedHandler = jwtAccessDeniedHandler;
+        this.jwtFilter = jwtFilter;
+    }
 
     // 외부에서 이미지 파일에 접근 가능 하도록 설정
     @Bean
@@ -28,8 +47,9 @@ public class SecurityConfig {
     // 비밀번호 암호화를 위한 빈 등록
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return  new BCryptPasswordEncoder();
+        return new BCryptPasswordEncoder();
     }
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
@@ -37,6 +57,11 @@ public class SecurityConfig {
                 // CSRF 설정 Disable
                 .csrf()
                 .disable()
+                // exception handling 설정 추가
+                .exceptionHandling()
+                .authenticationEntryPoint(jwtAuthenticationEntryPoint)
+                .accessDeniedHandler(jwtAccessDeniedHandler)
+                .and()
                 // 시큐리티는 기본적으로 세션을 사용하지만 API 서버에선 세션을 사용하지 않기 때문에 세션 설정을 Stateless 로 설정
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
@@ -52,7 +77,10 @@ public class SecurityConfig {
                 .antMatchers("/api/**").hasAnyRole("USER", "ADMIN")  // 나머지 API 는 전부 인증 필요
                 .and()
                 .cors()
+                // 실제 요청에 대해서 적용할 JwtFilter 설정
+                // 인증을 처리하는 기본 필터 UsernamePasswordAuthenticationFilter 대신 별도의 인증 로직을 가진 커스텀 필터 사용
                 .and()
+                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
 
     }
