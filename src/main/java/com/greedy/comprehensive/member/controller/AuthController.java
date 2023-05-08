@@ -14,33 +14,33 @@ import com.greedy.comprehensive.member.service.AuthService;
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
-
-    private final AuthService authService;
-
-    public AuthController(AuthService authService) {
-        this.authService = authService;
-    }
-
-    /* 1. 회원 가입 */
-    @PostMapping("/signup")
-    public ResponseEntity<ResponseDto> signup(@RequestBody MemberDto memberDto) {
-
-        authService.signup(memberDto);
-
-        return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "회원 가입 완료"));
-    }
-
-    /* 2. 로그인 */
-    @PostMapping("/login")
-    public ResponseEntity<ResponseDto> login(@RequestBody MemberDto memberDto) {
-
-        return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "로그인 완료", authService.login(memberDto)));
-    }
-
-
-
-
-
+	
+	private final AuthService authService;
+	
+	public AuthController(AuthService authService) {
+		this.authService = authService;
+	}
+	
+	/* 1. 회원 가입 */
+	@PostMapping("/signup")
+	public ResponseEntity<ResponseDto> signup(@RequestBody MemberDto memberDto) {
+		
+		authService.signup(memberDto);
+		
+		return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "회원 가입 완료"));
+	}
+	
+	/* 2. 로그인 */
+	@PostMapping("/login")
+	public ResponseEntity<ResponseDto> login(@RequestBody MemberDto memberDto) {
+		
+		return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "로그인 완료", authService.login(memberDto)));
+	}
+	
+	
+	
+	
+	
 }
 
 

@@ -13,12 +13,12 @@ import lombok.Setter;
 @Entity
 @Table(name="TBL_CATEGORY")
 public class Category {
-
-    @Id
-    @Column(name="CATEGORY_CODE")
-    private Long categoryCode;
-
-    @Column(name="CATEGORY_NAME")
-    private String categoryName;
-
+	
+	@Id
+	@Column(name="CATEGORY_CODE")
+	private Long categoryCode;
+	
+	@Column(name="CATEGORY_NAME")
+	private String categoryName;
+	
 }
